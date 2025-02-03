@@ -14,13 +14,10 @@ namespace SteamUtility.Commands
 
         public void Execute(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 3)
             {
-                MessageBox.Show(
-                    "Usage: SteamUtility.exe toggle_achievement <AppID> <AchievementID>",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
+                Console.WriteLine(
+                    "Usage: SteamUtility.exe toggle_achievement <app_id> <achievement_id>"
                 );
                 return;
             }
@@ -31,12 +28,7 @@ namespace SteamUtility.Commands
             // Validate the AppID
             if (!uint.TryParse(args[1], out appId))
             {
-                MessageBox.Show(
-                    "Invalid AppID. Please provide a valid numeric AppID.",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("{\"error\":\"Invalid app_id\"}");
                 return;
             }
 
@@ -46,7 +38,7 @@ namespace SteamUtility.Commands
             // Initialize the Steam API
             if (!SteamAPI.Init())
             {
-                Console.WriteLine("error");
+                Console.WriteLine("{\"fail\":\"Failed to initialize Steam API\"}");
                 return;
             }
 
@@ -61,12 +53,7 @@ namespace SteamUtility.Commands
                 // Check if the API call is valid
                 if (apiCall == SteamAPICall_t.Invalid)
                 {
-                    MessageBox.Show(
-                        "Failed to request stats from Steam.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    Console.WriteLine("{\"error\":\"Failed to requests stats from Steam\"}");
                     return;
                 }
 
@@ -77,12 +64,7 @@ namespace SteamUtility.Commands
                     SteamAPI.RunCallbacks();
                     if ((DateTime.Now - startTime).TotalSeconds > 10)
                     {
-                        MessageBox.Show(
-                            "Timed out waiting for stats from Steam.",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+                        Console.WriteLine("{\"error\":\"Callback timed out\"}");
                         return;
                     }
                     Thread.Sleep(100);
@@ -97,15 +79,11 @@ namespace SteamUtility.Commands
                         if (SteamUserStats.ClearAchievement(achievementId))
                         {
                             SteamUserStats.StoreStats();
+                            Console.WriteLine("{\"success\":\"Successfully locked achievement\"}");
                         }
                         else
                         {
-                            MessageBox.Show(
-                                "Failed to lock achievement.",
-                                "Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                            );
+                            Console.WriteLine("{\"error\":\"Failed to lock achievement\"}");
                         }
                     }
                     else
@@ -113,36 +91,26 @@ namespace SteamUtility.Commands
                         if (SteamUserStats.SetAchievement(achievementId))
                         {
                             SteamUserStats.StoreStats();
+                            Console.WriteLine(
+                                "{\"success\":\"Successfully unlocked achievement\"}"
+                            );
                         }
                         else
                         {
-                            MessageBox.Show(
-                                "Failed to unlock achievement.",
-                                "Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                            );
+                            Console.WriteLine("{\"error\":\"Failed to unlock achievement\"}");
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Failed to get achievement data. It might not exist.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
+                    Console.WriteLine(
+                        "{\"error\":\"Failed to get achievement data. The achievement might not exists\"}"
                     );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"An error occurred: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("{\"error\":\"An error occurred: " + ex.Message + "\"}");
             }
             finally
             {
@@ -162,11 +130,10 @@ namespace SteamUtility.Commands
                 }
                 else
                 {
-                    MessageBox.Show(
-                        $"Failed to receive stats from Steam. Error code: {pCallback.m_eResult}",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
+                    Console.WriteLine(
+                        "{\"error\":\"Failed to receive stats from Steam. Error code: "
+                            + pCallback.m_eResult
+                            + "\"}"
                     );
                 }
             }

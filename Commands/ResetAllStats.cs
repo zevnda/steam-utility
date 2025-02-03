@@ -5,27 +5,21 @@ using Steamworks;
 
 namespace SteamUtility.Commands
 {
-    public class UnlockAchievement : ICommand
+    public class ResetAllStats : ICommand
     {
         static bool statsReceived = false;
-
-        // Callback for when user stats are received
         static Callback<UserStatsReceived_t> statsReceivedCallback;
 
         public void Execute(string[] args)
         {
-            if (args.Length < 3)
+            if (args.Length < 2)
             {
-                Console.WriteLine(
-                    "Usage: SteamUtility.exe unlock_achievement <app_id> <achievement_id>"
-                );
+                Console.WriteLine("Usage: SteamUtility.exe reset_all_stats <app_id>");
                 return;
             }
 
-            uint appId;
-            string achievementId = args[2];
-
             // Validate the AppID
+            uint appId;
             if (!uint.TryParse(args[1], out appId))
             {
                 Console.WriteLine("{\"error\":\"Invalid app_id\"}");
@@ -70,24 +64,21 @@ namespace SteamUtility.Commands
                     Thread.Sleep(100);
                 }
 
-                // Check if the achievement exists and unlock it
-                if (SteamUserStats.GetAchievement(achievementId, out _))
+                // Reset all stats
+                if (SteamUserStats.ResetAllStats(false))
                 {
-                    if (SteamUserStats.SetAchievement(achievementId))
+                    if (SteamUserStats.StoreStats())
                     {
-                        SteamUserStats.StoreStats();
-                        Console.WriteLine("{\"success\":\"Successfully unlocked achievement\"}");
+                        Console.WriteLine("{\"success\":\"Successfully reset all stats\"}");
                     }
                     else
                     {
-                        Console.WriteLine("{\"error\":\"Failed to unlock achievement\"}");
+                        Console.WriteLine("{\"error\":\"Failed to reset all stats\"}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine(
-                        "{\"error\":\"Failed to get achievement data. The achievement might not exists\"}"
-                    );
+                    Console.WriteLine("{\"error\":\"Failed to reset all stats\"}");
                 }
             }
             catch (Exception ex)

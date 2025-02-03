@@ -12,24 +12,14 @@ namespace SteamUtility.Commands
         {
             if (args.Length < 3)
             {
-                MessageBox.Show(
-                    "Usage: SteamUtility.exe idle <AppID> <true|false>",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("Usage: SteamUtility.exe idle <app_id> <quiet true|false>");
                 return;
             }
 
             // Validate the AppID
             if (!uint.TryParse(args[1], out uint appId))
             {
-                MessageBox.Show(
-                    "Invalid AppID. Please provide a valid Steam AppID (e.g. 221100).",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("{\"error\":\"Invalid app_id\"}");
                 return;
             }
 
@@ -39,7 +29,12 @@ namespace SteamUtility.Commands
             // Initialize the Steam API
             if (!SteamAPI.Init())
             {
+                Console.WriteLine("{\"fail\":\"Failed to initialize Steam API\"}");
                 return;
+            }
+            else
+            {
+                Console.WriteLine("{\"success\":\"Steam API initialized\"}");
             }
 
             // Determine if quiet mode is enabled

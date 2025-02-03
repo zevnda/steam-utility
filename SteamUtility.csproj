@@ -6,7 +6,7 @@
     <!-- Project Properties -->
     <PropertyGroup>
         <ProjectGuid>{5D53F071-E827-4905-A9D9-E09E59902F32}</ProjectGuid>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <OutputPath>..\src-tauri\libs\</OutputPath>
         <RootNamespace>SteamUtility</RootNamespace>
         <AssemblyName>SteamUtility</AssemblyName>
@@ -55,13 +55,13 @@
         </Compile>
         <Compile Include="Program.cs" />
         <Compile Include="Commands\ICommand.cs" />
-        <Compile Include="Commands\GetSteamUsers.cs" />
         <Compile Include="Commands\Idle.cs" />
-        <Compile Include="Commands\UpdateStats.cs" />
-        <Compile Include="Commands\ResetStats.cs" />
-        <Compile Include="Commands\ToggleAchievement.cs" />
-        <Compile Include="Commands\LockAchievement.cs" />
         <Compile Include="Commands\UnlockAchievement.cs" />
+        <Compile Include="Commands\LockAchievement.cs" />
+        <Compile Include="Commands\ToggleAchievement.cs" />
+        <Compile Include="Commands\LockAllAchievement.cs" />
+        <Compile Include="Commands\UpdateStat.cs" />
+        <Compile Include="Commands\ResetAllStats.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <!-- Embedded Resources -->

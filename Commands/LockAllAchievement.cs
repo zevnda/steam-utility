@@ -5,7 +5,7 @@ using Steamworks;
 
 namespace SteamUtility.Commands
 {
-    public class ResetStats : ICommand
+    public class LockAllAchievements : ICommand
     {
         static bool statsReceived = false;
         static Callback<UserStatsReceived_t> statsReceivedCallback;
@@ -14,12 +14,7 @@ namespace SteamUtility.Commands
         {
             if (args.Length < 2)
             {
-                MessageBox.Show(
-                    "Usage: SteamUtility.exe reset_stats <AppID>",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("Usage: SteamUtility.exe lock_all_achievements <app_id>");
                 return;
             }
 
@@ -27,12 +22,7 @@ namespace SteamUtility.Commands
             uint appId;
             if (!uint.TryParse(args[1], out appId))
             {
-                MessageBox.Show(
-                    "Invalid AppID. Please provide a valid Steam App ID (e.g. 221100).",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("{\"error\":\"Invalid app_id\"}");
                 return;
             }
 
@@ -42,7 +32,7 @@ namespace SteamUtility.Commands
             // Initialize the Steam API
             if (!SteamAPI.Init())
             {
-                Console.WriteLine("error");
+                Console.WriteLine("{\"fail\":\"Failed to initialize Steam API\"}");
                 return;
             }
 
@@ -57,12 +47,7 @@ namespace SteamUtility.Commands
                 // Check if the API call is valid
                 if (apiCall == SteamAPICall_t.Invalid)
                 {
-                    MessageBox.Show(
-                        "Failed to request stats from Steam.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    Console.WriteLine("{\"error\":\"Failed to requests stats from Steam\"}");
                     return;
                 }
 
@@ -73,12 +58,7 @@ namespace SteamUtility.Commands
                     SteamAPI.RunCallbacks();
                     if ((DateTime.Now - startTime).TotalSeconds > 10)
                     {
-                        MessageBox.Show(
-                            "Timed out waiting for stats from Steam.",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+                        Console.WriteLine("{\"error\":\"Callback timed out\"}");
                         return;
                     }
                     Thread.Sleep(100);
@@ -89,36 +69,21 @@ namespace SteamUtility.Commands
                 {
                     if (SteamUserStats.StoreStats())
                     {
-                        Console.WriteLine("All stats reset successfully.");
+                        Console.WriteLine("{\"success\":\"Successfully lock all achievements\"}");
                     }
                     else
                     {
-                        MessageBox.Show(
-                            "Failed to store reset stats.",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+                        Console.WriteLine("{\"error\":\"Failed to lock all achievements\"}");
                     }
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Failed to reset stats.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    Console.WriteLine("{\"error\":\"Failed to lock all achievements\"}");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"An error occurred: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("{\"error\":\"An error occurred: " + ex.Message + "\"}");
             }
             finally
             {
@@ -138,11 +103,10 @@ namespace SteamUtility.Commands
                 }
                 else
                 {
-                    MessageBox.Show(
-                        $"Failed to receive stats from Steam. Error code: {pCallback.m_eResult}",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
+                    Console.WriteLine(
+                        "{\"error\":\"Failed to receive stats from Steam. Error code: "
+                            + pCallback.m_eResult
+                            + "\"}"
                     );
                 }
             }

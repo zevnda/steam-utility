@@ -5,20 +5,17 @@ using Steamworks;
 
 namespace SteamUtility.Commands
 {
-    public class UpdateStats : ICommand
+    public class UpdateStat : ICommand
     {
         static bool statsReceived = false;
         static Callback<UserStatsReceived_t> statsReceivedCallback;
 
         public void Execute(string[] args)
         {
-            if (args.Length < 3)
+            if (args.Length < 4)
             {
-                MessageBox.Show(
-                    "Usage: SteamUtility.exe s <AppID> <StatName> <NewValue>",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
+                Console.WriteLine(
+                    "Usage: SteamUtility.exe update_stat <app_id> <stat_name> <new_value>"
                 );
                 return;
             }
@@ -27,12 +24,7 @@ namespace SteamUtility.Commands
             uint appId;
             if (!uint.TryParse(args[1], out appId))
             {
-                MessageBox.Show(
-                    "Invalid AppID. Please provide a valid Steam App ID (e.g. 221100).",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("{\"error\":\"Invalid app_id\"}");
                 return;
             }
 
@@ -45,7 +37,7 @@ namespace SteamUtility.Commands
             // Initialize the Steam API
             if (!SteamAPI.Init())
             {
-                Console.WriteLine("error");
+                Console.WriteLine("{\"fail\":\"Failed to initialize Steam API\"}");
                 return;
             }
 
@@ -60,12 +52,7 @@ namespace SteamUtility.Commands
                 // Check if the API call is valid
                 if (apiCall == SteamAPICall_t.Invalid)
                 {
-                    MessageBox.Show(
-                        "Failed to request stats from Steam.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    Console.WriteLine("{\"error\":\"Failed to requests stats from Steam\"}");
                     return;
                 }
 
@@ -76,12 +63,7 @@ namespace SteamUtility.Commands
                     SteamAPI.RunCallbacks();
                     if ((DateTime.Now - startTime).TotalSeconds > 10)
                     {
-                        MessageBox.Show(
-                            "Timed out waiting for stats from Steam.",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+                        Console.WriteLine("{\"error\":\"Callback timed out\"}");
                         return;
                     }
                     Thread.Sleep(100);
@@ -99,12 +81,7 @@ namespace SteamUtility.Commands
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Invalid new value. Please provide a valid integer or float.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    Console.WriteLine("{\"error\":\"Invalid integer or float\"}");
                     return;
                 }
 
@@ -113,31 +90,23 @@ namespace SteamUtility.Commands
                 {
                     if (SteamUserStats.StoreStats())
                     {
-                        Console.WriteLine($"Stat '{statName}' updated successfully to {newValue}.");
+                        Console.WriteLine("{\"success\":\"Successfully updated stat\"}");
                     }
                     else
                     {
-                        MessageBox.Show(
-                            "Failed to store updated stats.",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+                        Console.WriteLine("{\"error\":\"Failed to update stat\"}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"Failed to update stat '{statName}'. It might not exist.");
+                    Console.WriteLine(
+                        "{\"error\":\"Failed to update stat. The stat might not exists\"}"
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"An error occurred: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Console.WriteLine("{\"error\":\"An error occurred: " + ex.Message + "\"}");
             }
             finally
             {
@@ -157,11 +126,10 @@ namespace SteamUtility.Commands
                 }
                 else
                 {
-                    MessageBox.Show(
-                        $"Failed to receive stats from Steam. Error code: {pCallback.m_eResult}",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
+                    Console.WriteLine(
+                        "{\"error\":\"Failed to receive stats from Steam. Error code: "
+                            + pCallback.m_eResult
+                            + "\"}"
                     );
                 }
             }
