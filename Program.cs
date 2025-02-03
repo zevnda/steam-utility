@@ -13,6 +13,7 @@ namespace SteamUtility
             { "unlock_achievement", new UnlockAchievement() },
             { "lock_achievement", new LockAchievement() },
             { "toggle_achievement", new ToggleAchievement() },
+            { "unlock_all_achievements", new UnlockAllAchievements() },
             { "lock_all_achievements", new LockAllAchievements() },
             { "update_stat", new UpdateStat() },
             { "reset_all_stats", new ResetAllStats() },
