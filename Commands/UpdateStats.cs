@@ -1,21 +1,23 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Steamworks;
 
 namespace SteamUtility.Commands
 {
-    public class UpdateStat : ICommand
+    public class UpdateStats : ICommand
     {
         static bool statsReceived = false;
         static Callback<UserStatsReceived_t> statsReceivedCallback;
 
         public void Execute(string[] args)
         {
-            if (args.Length < 4)
+            if (args.Length < 3)
             {
                 Console.WriteLine(
-                    "Usage: SteamUtility.exe update_stat <app_id> <stat_name> <new_value>"
+                    "Usage: SteamUtility.exe update_stats <app_id> [\"{statName: 'stat_one', newValue: 10}\", \"{statName: 'stat_two', newValue: 1.5}\", ...]"
                 );
                 return;
             }
@@ -28,8 +30,18 @@ namespace SteamUtility.Commands
                 return;
             }
 
-            string statName = args[2];
-            string newValue = args[3];
+            // Parse the JSON array of stats and new values
+            StatUpdate[] statUpdates;
+            try
+            {
+                string jsonArray = string.Join(" ", args.Skip(2));
+                statUpdates = JsonConvert.DeserializeObject<StatUpdate[]>(jsonArray);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("{\"error\":\"Invalid stats format: " + ex.Message + "\"}");
+                return;
+            }
 
             // Set the Steam App ID environment variable
             Environment.SetEnvironmentVariable("SteamAppId", appId.ToString());
@@ -69,39 +81,56 @@ namespace SteamUtility.Commands
                     Thread.Sleep(100);
                 }
 
-                // Update the stat with the new value
-                bool success = false;
-                if (int.TryParse(newValue, out int intValue))
+                bool allSuccess = true;
+                foreach (var statUpdate in statUpdates)
                 {
-                    success = SteamUserStats.SetStat(statName, intValue);
-                }
-                else if (float.TryParse(newValue, out float floatValue))
-                {
-                    success = SteamUserStats.SetStat(statName, floatValue);
-                }
-                else
-                {
-                    Console.WriteLine("{\"error\":\"Invalid integer or float\"}");
-                    return;
-                }
-
-                // Store the updated stats
-                if (success)
-                {
-                    if (SteamUserStats.StoreStats())
+                    // Update the stat with the new value
+                    bool success = false;
+                    if (int.TryParse(statUpdate.newValue.ToString(), out int intValue))
                     {
-                        Console.WriteLine("{\"success\":\"Successfully updated stat\"}");
+                        success = SteamUserStats.SetStat(statUpdate.statName, intValue);
+                    }
+                    else if (float.TryParse(statUpdate.newValue.ToString(), out float floatValue))
+                    {
+                        success = SteamUserStats.SetStat(statUpdate.statName, floatValue);
                     }
                     else
                     {
-                        Console.WriteLine("{\"error\":\"Failed to update stat\"}");
+                        allSuccess = false;
+                        Console.WriteLine(
+                            "{\"error\":\"Invalid integer or float for stat: "
+                                + statUpdate.statName
+                                + "\"}"
+                        );
+                        continue;
+                    }
+
+                    if (!success)
+                    {
+                        allSuccess = false;
+                        Console.WriteLine(
+                            "{\"error\":\"Failed to update stat: "
+                                + statUpdate.statName
+                                + ". The stat might not exist\"}"
+                        );
+                    }
+                }
+
+                // Store the updated stats
+                if (allSuccess)
+                {
+                    if (SteamUserStats.StoreStats())
+                    {
+                        Console.WriteLine("{\"success\":\"Successfully updated all stats\"}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("{\"error\":\"Failed to store updated stats\"}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine(
-                        "{\"error\":\"Failed to update stat. The stat might not exists\"}"
-                    );
+                    Console.WriteLine("{\"error\":\"One or more stats failed to update\"}");
                 }
             }
             catch (Exception ex)
@@ -133,6 +162,13 @@ namespace SteamUtility.Commands
                     );
                 }
             }
+        }
+
+        // Class to represent stat updates
+        private class StatUpdate
+        {
+            public string statName { get; set; }
+            public object newValue { get; set; }
         }
     }
 }

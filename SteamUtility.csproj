@@ -61,7 +61,7 @@
         <Compile Include="Commands\ToggleAchievement.cs" />
         <Compile Include="Commands\UnlockAllAchievements.cs" />
         <Compile Include="Commands\LockAllAchievement.cs" />
-        <Compile Include="Commands\UpdateStat.cs" />
+        <Compile Include="Commands\UpdateStats.cs" />
         <Compile Include="Commands\ResetAllStats.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

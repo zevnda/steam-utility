@@ -15,7 +15,7 @@ namespace SteamUtility
             { "toggle_achievement", new ToggleAchievement() },
             { "unlock_all_achievements", new UnlockAllAchievements() },
             { "lock_all_achievements", new LockAllAchievements() },
-            { "update_stat", new UpdateStat() },
+            { "update_stats", new UpdateStats() },
             { "reset_all_stats", new ResetAllStats() },
         };
 
@@ -53,8 +53,15 @@ namespace SteamUtility
                 { "unlock_achievement", "unlock_achievement <app_id> <achievement_id>" },
                 { "lock_achievement", "lock_achievement <app_id> <achievement_id>" },
                 { "toggle_achievement", "toggle_achievement <app_id> <achievement_id>" },
+                {
+                    "unlock_all_achievements",
+                    "unlock_all_achievements <app_id> [\"achievement_id1\", \"achievement_id2\", ...]"
+                },
                 { "lock_all_achievements", "lock_all_achievements <app_id>" },
-                { "update_stat", "update_stat <app_id> <stat_name> <value>" },
+                {
+                    "update_stats",
+                    "update_stats <app_id> [\"{statName: 'stat_one', newValue: 10}\", \"{statName: 'stat_two', newValue: 1.5}\", ...]"
+                },
                 { "reset_all_stats", "reset_all_stats <app_id>" },
             };
 
