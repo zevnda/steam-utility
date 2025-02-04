@@ -29,6 +29,7 @@ jobs:
             $outputPath = "..\src-tauri\libs\"
             $zipPath = "SteamUtility_${{ github.event.inputs.version }}.zip"
             Compress-Archive -Path "$outputPath\*.exe" -DestinationPath $zipPath
+            Compress-Archive -Path ".\icon.ico" -Update $zipPath
             Compress-Archive -Path ".\libs\*" -Update $zipPath
           shell: pwsh
 
