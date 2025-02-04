@@ -29,48 +29,7 @@ jobs:
             $outputPath = "..\src-tauri\libs\"
             $zipPath = "SteamUtility_${{ github.event.inputs.version }}.zip"
             Compress-Archive -Path "$outputPath\*.exe" -DestinationPath $zipPath
-            Compress-Archive -Path ".\libs\*" -name: Build release
-
-on:
-  workflow_dispatch:
-    inputs:
-        version:
-          description: 'New Version'
-          required: true
-
-permissions:
-  contents: write
-  
-jobs:        
-  build_release_bundle:
-    runs-on: windows-latest
-    steps:
-        - name: Set up MSBuild
-          uses: microsoft/setup-msbuild@v2
-
-        - name: Checkout repository
-          uses: actions/checkout@v4
-
-        - name: Build library files
-          run: MSBuild.exe .\SteamUtility.csproj
-          shell: pwsh
-
-        - name: Create zip file
-          run: |
-            $outputPath = "..\src-tauri\libs\"
-            $zipPath = "SteamUtility_${{ github.event.inputs.version }}.zip"
-            Compress-Archive -Path "$outputPath\*.exe" -DestinationPath $zipPath
             Compress-Archive -Path ".\libs\*" -Update $zipPath
-          shell: pwsh
-
-        - name: Create release
-          uses: softprops/action-gh-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: ${{ github.event.inputs.version }}
-            name: SteamUtility v${{ github.event.inputs.version }}
-            files: SteamUtility_${{ github.event.inputs.version }}.zip $zipPath
           shell: pwsh
 
         - name: Create release
