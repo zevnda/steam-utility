@@ -19,6 +19,7 @@ namespace SteamUtility.Commands
                 Console.WriteLine(
                     "Usage: SteamUtility.exe toggle_achievement <app_id> <achievement_id>"
                 );
+                Console.WriteLine("Example: SteamUtility.exe toggle_achievement 440 WIN_100_GAMES");
                 return;
             }
 

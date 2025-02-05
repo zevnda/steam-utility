@@ -17,6 +17,7 @@ namespace SteamUtility.Commands
                 Console.WriteLine(
                     "Usage: SteamUtility.exe lock_achievement <app_id> <achievement_id>"
                 );
+                Console.WriteLine("Example: SteamUtility.exe lock_achievement 440 WIN_100_GAMES");
                 return;
             }
 

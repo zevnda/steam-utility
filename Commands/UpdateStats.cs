@@ -17,7 +17,10 @@ namespace SteamUtility.Commands
             if (args.Length < 3)
             {
                 Console.WriteLine(
-                    "Usage: SteamUtility.exe update_stats <app_id> [\"{statName: 'stat_one', newValue: 10}\", \"{statName: 'stat_two', newValue: 1.5}\", ...]"
+                    "Usage: SteamUtility.exe update_stats <app_id> <[stat_objects...]>"
+                );
+                Console.WriteLine(
+                    "Example: SteamUtility.exe update_stats 440 [\"{name: 'WINS', value: 100}\", \"{name: 'MONEY', value: 19.50}\", ...]"
                 );
                 return;
             }
@@ -86,20 +89,20 @@ namespace SteamUtility.Commands
                 {
                     // Update the stat with the new value
                     bool success = false;
-                    if (int.TryParse(statUpdate.newValue.ToString(), out int intValue))
+                    if (int.TryParse(statUpdate.value.ToString(), out int intValue))
                     {
-                        success = SteamUserStats.SetStat(statUpdate.statName, intValue);
+                        success = SteamUserStats.SetStat(statUpdate.name, intValue);
                     }
-                    else if (float.TryParse(statUpdate.newValue.ToString(), out float floatValue))
+                    else if (float.TryParse(statUpdate.value.ToString(), out float floatValue))
                     {
-                        success = SteamUserStats.SetStat(statUpdate.statName, floatValue);
+                        success = SteamUserStats.SetStat(statUpdate.name, floatValue);
                     }
                     else
                     {
                         allSuccess = false;
                         Console.WriteLine(
                             "{\"error\":\"Invalid integer or float for stat: "
-                                + statUpdate.statName
+                                + statUpdate.name
                                 + "\"}"
                         );
                         continue;
@@ -110,7 +113,7 @@ namespace SteamUtility.Commands
                         allSuccess = false;
                         Console.WriteLine(
                             "{\"error\":\"Failed to update stat: "
-                                + statUpdate.statName
+                                + statUpdate.name
                                 + ". The stat might not exist\"}"
                         );
                     }
@@ -167,8 +170,8 @@ namespace SteamUtility.Commands
         // Class to represent stat updates
         private class StatUpdate
         {
-            public string statName { get; set; }
-            public object newValue { get; set; }
+            public string name { get; set; }
+            public object value { get; set; }
         }
     }
 }

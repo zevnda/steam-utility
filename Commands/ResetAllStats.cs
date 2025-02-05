@@ -15,6 +15,7 @@ namespace SteamUtility.Commands
             if (args.Length < 2)
             {
                 Console.WriteLine("Usage: SteamUtility.exe reset_all_stats <app_id>");
+                Console.WriteLine("Example: SteamUtility.exe reset_all_stats 440");
                 return;
             }
 

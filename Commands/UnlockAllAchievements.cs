@@ -16,35 +16,19 @@ namespace SteamUtility.Commands
 
         public void Execute(string[] args)
         {
-            if (args.Length < 3)
+            if (args.Length < 2)
             {
-                Console.WriteLine(
-                    "Usage: SteamUtility.exe unlock_all_achievements <app_id> [\"achievement_id1\", \"achievement_id2\", ...]"
-                );
+                Console.WriteLine("Usage: SteamUtility.exe unlock_all_achievements <app_id>");
+                Console.WriteLine("Example: SteamUtility.exe unlock_all_achievements 440");
                 return;
             }
 
             uint appId;
-            string[] achievementIds;
 
             // Validate the AppID
             if (!uint.TryParse(args[1], out appId))
             {
                 Console.WriteLine("{\"error\":\"Invalid app_id\"}");
-                return;
-            }
-
-            // Parse the JSON array of achievement IDs
-            try
-            {
-                string jsonArray = string.Join(" ", args.Skip(2));
-                achievementIds = JsonConvert.DeserializeObject<string[]>(jsonArray);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    "{\"error\":\"Invalid achievement_ids format: " + ex.Message + "\"}"
-                );
                 return;
             }
 
@@ -86,29 +70,17 @@ namespace SteamUtility.Commands
                     Thread.Sleep(100);
                 }
 
+                int achievementCount = (int)SteamUserStats.GetNumAchievements();
                 bool allSuccess = true;
-                foreach (string achievementId in achievementIds)
+                for (int i = 0; i < achievementCount; i++)
                 {
-                    // Check if the achievement exists and unlock it
-                    if (SteamUserStats.GetAchievement(achievementId, out _))
-                    {
-                        if (!SteamUserStats.SetAchievement(achievementId))
-                        {
-                            allSuccess = false;
-                            Console.WriteLine(
-                                "{\"error\":\"Failed to unlock achievement: "
-                                    + achievementId
-                                    + "\"}"
-                            );
-                        }
-                    }
-                    else
+                    string achievementId = SteamUserStats.GetAchievementName((uint)i);
+                    // Unlock the achievement
+                    if (!SteamUserStats.SetAchievement(achievementId))
                     {
                         allSuccess = false;
                         Console.WriteLine(
-                            "{\"error\":\"Failed to get achievement data for: "
-                                + achievementId
-                                + ". The achievement might not exist\"}"
+                            "{\"error\":\"Failed to unlock achievement: " + achievementId + "\"}"
                         );
                     }
                 }

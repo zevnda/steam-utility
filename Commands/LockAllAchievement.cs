@@ -15,6 +15,7 @@ namespace SteamUtility.Commands
             if (args.Length < 2)
             {
                 Console.WriteLine("Usage: SteamUtility.exe lock_all_achievements <app_id>");
+                Console.WriteLine("Example: SteamUtility.exe lock_all_achievements 440");
                 return;
             }
 

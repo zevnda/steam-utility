@@ -13,6 +13,7 @@ namespace SteamUtility.Commands
             if (args.Length < 3)
             {
                 Console.WriteLine("Usage: SteamUtility.exe idle <app_id> <quiet true|false>");
+                Console.WriteLine("Example: SteamUtility.exe idle 440 false");
                 return;
             }
 

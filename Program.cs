@@ -33,42 +33,50 @@ namespace SteamUtility
             {
                 commandHandler.Execute(args);
             }
-            else
+            else if (command == "--help" || command == "-h")
             {
                 ShowUsage();
+            }
+            else
+            {
+                Console.WriteLine($"Unknown command: {command} \n\nUse --help for help");
             }
         }
 
         static void ShowUsage()
         {
-            Console.WriteLine("Version 1.0.0 by zevnda");
-            Console.WriteLine("\nUsage:");
-            Console.WriteLine("      SteamUtility.exe <command> [args...]");
-            Console.WriteLine("      SteamUtility.exe [--help | -h]");
-            Console.WriteLine("\nCommands:                         Usage:");
-
             var commandUsages = new Dictionary<string, string>
             {
-                { "idle", "idle <app_id> <quiet true|false>" },
-                { "unlock_achievement", "unlock_achievement <app_id> <achievement_id>" },
-                { "lock_achievement", "lock_achievement <app_id> <achievement_id>" },
-                { "toggle_achievement", "toggle_achievement <app_id> <achievement_id>" },
+                { "idle <app_id> <no-window:bool>", "Start idling a specific game" },
+                { "unlock_achievement <app_id> <ach_id>", "Unlock a single achievement" },
+                { "lock_achievement <app_id> <ach_id>", "Lock a single achievement" },
                 {
-                    "unlock_all_achievements",
-                    "unlock_all_achievements <app_id> [\"achievement_id1\", \"achievement_id2\", ...]"
+                    "toggle_achievement <app_id> <ach_id>",
+                    "Toggle a single achievement's lock state"
                 },
-                { "lock_all_achievements", "lock_all_achievements <app_id>" },
-                {
-                    "update_stats",
-                    "update_stats <app_id> [\"{statName: 'stat_one', newValue: 10}\", \"{statName: 'stat_two', newValue: 1.5}\", ...]"
-                },
-                { "reset_all_stats", "reset_all_stats <app_id>" },
+                { "unlock_all_achievements <app_id>", "Unlock all achievements" },
+                { "lock_all_achievements <app_id>", "Lock all achievements" },
+                { "update_stats <app_id> <[stat_objects...]>", "Update achievement statistics" },
+                { "reset_all_stats <app_id>", "Reset all statistics" },
             };
+
+            Console.WriteLine("SteamUtility by zevnda");
+            Console.WriteLine("\nUsage:");
+            Console.WriteLine("    SteamUtility.exe <command> [args...]");
+            Console.WriteLine("    SteamUtility.exe [--help | -h]");
+            Console.WriteLine("\nCommands:");
 
             foreach (var cmd in commandUsages)
             {
-                Console.WriteLine($"      {cmd.Key, -30} SteamUtility.exe {cmd.Value}");
+                Console.WriteLine($"    {cmd.Key, -45} {cmd.Value}");
             }
+
+            Console.WriteLine("\nExamples:");
+            Console.WriteLine("    SteamUtility.exe idle 440 false");
+            Console.WriteLine("    SteamUtility.exe unlock_achievement 440 WIN_100_GAMES");
+            Console.WriteLine(
+                "    SteamUtility.exe update_stats 440 [\"{name: 'WINS', value: 100}\", \"{name: 'MONEY', value: 19.50}\", ...]"
+            );
         }
     }
 }
