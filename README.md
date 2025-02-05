@@ -3,23 +3,25 @@ The workhorse behind [**Steam Game Idler**](https://github.com/zevnda/steam-game
 
 ## Usage
 SteamUtility can be used as a standalone CLI tool in the following way
-```
-SteamUtility.exe <command> [args...]
-SteamUtility.exe [--help | -h]
-```
 
-For a detailed overview of a specific command provide the command name with no args
 ```
-SteamUtility.exe <command>
-```
+Usage:
+    SteamUtility.exe <command> [args...]
+    SteamUtility.exe [--help | -h]
 
-| Command                   | Arguments                         | Description                                 |
-|---------------------------|-----------------------------------|---------------------------------------------|
-| `idle`                    | `<app_id>` `<true\|false>`        | Enter idle state for the specified game     |
-| `unlock_achievement`      | `<app_id>` `<achievement_id>`     | Unlock a specific achievement               |
-| `lock_achievement`        | `<app_id>` `<achievement_id>`     | Lock a specific achievement                 |
-| `toggle_achievement`      | `<app_id>` `<achievement_id>`     | Toggle the state of a specific achievement  |
-| `unlock_all_achievements` | `<app_id>` `<achievements_array>` | Bulk unlock multiple achievements           |
-| `lock_all_achievements`   | `<app_id>`                        | Lock all achievements                       |
-| `update_stats`            | `<app_id>` `<stats_array>`        | Bulk update multiple statistics             |
-| `reset_all_stats`         | `<app_id>`                        | Reset all statistics                        |
+Commands:
+    idle <app_id> <no-window:bool>                            Start idling a specific game
+    unlock_achievement <app_id> <ach_id>                      Unlock a single achievement
+    lock_achievement <app_id> <ach_id>                        Lock a single achievement  
+    toggle_achievement <app_id> <ach_id>                      Toggle a single achievement's lock state
+    unlock_all_achievements <app_id> <ach_ids...>             Unlock all achievements
+    lock_all_achievements <app_id>                            Lock all achievements
+    update_stats <app_id> <stat_objects...>                   Update achievement statistics
+    reset_all_stats <app_id>                                  Reset all statistics
+
+Examples:
+    SteamUtility.exe idle 440 true
+    SteamUtility.exe unlock_achievement 440 WIN_100_GAMES
+    SteamUtility.exe unlock_all_achievements 440 ["ach_10_WINS", "ach_50_KILLS"]
+    SteamUtility.exe update_stats 440 ["{name: 'stat_KILLS', value: 100}", "{name: 'stat_MONEY', value: 199.50}"]
+```
