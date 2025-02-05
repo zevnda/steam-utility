@@ -22,6 +22,6 @@ Commands:
 Examples:
     SteamUtility.exe idle 440 true
     SteamUtility.exe unlock_achievement 440 WIN_100_GAMES
-    SteamUtility.exe unlock_all_achievements 440 ["ach_10_WINS", "ach_50_KILLS"]
-    SteamUtility.exe update_stats 440 ["{name: 'stat_KILLS', value: 100}", "{name: 'stat_MONEY', value: 199.50}"]
+    SteamUtility.exe unlock_all_achievements 440 ["WIN_100_GAMES", "GET_30_KILLS"]
+    SteamUtility.exe update_stats 440 ["{name: 'stat_WINS', value: 100}", "{name: 'stat_MONEY', value: 19.50}"]
 ```
