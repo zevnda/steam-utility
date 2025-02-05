@@ -32,14 +32,6 @@ jobs:
             $updatedProgram = $program -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
             $updatedProgram | Set-Content Program.cs
 
-        - name: Commit changes
-          run: |
-            git config --local user.name "github-actions[bot]"
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git add Properties/AssemblyInfo.cs Program.cs
-            git commit -m "Bump version to ${{ github.event.inputs.version }}"
-            git push
-
         - name: Build library files
           run: MSBuild.exe .\SteamUtility.csproj
           shell: pwsh
@@ -52,6 +44,14 @@ jobs:
             Compress-Archive -Path ".\icon.ico" -Update $zipPath
             Compress-Archive -Path ".\libs\*" -Update $zipPath
           shell: pwsh
+
+        - name: Commit changes
+          run: |
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git add Properties/AssemblyInfo.cs Program.cs
+            git commit -m "Bump version to ${{ github.event.inputs.version }}"
+            git push
 
         - name: Create release
           uses: softprops/action-gh-release@v1
