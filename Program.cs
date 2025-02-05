@@ -60,7 +60,7 @@ namespace SteamUtility
                 { "reset_all_stats <app_id>", "Reset all statistics" },
             };
 
-            Console.WriteLine("SteamUtility by zevnda");
+            Console.WriteLine("SteamUtility 1.1.0 by zevnda");
             Console.WriteLine("\nUsage:");
             Console.WriteLine("    SteamUtility.exe <command> [args...]");
             Console.WriteLine("    SteamUtility.exe [--help | -h]");

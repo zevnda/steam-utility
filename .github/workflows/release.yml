@@ -3,6 +3,9 @@ name: Build release
 on:
   workflow_dispatch:
     inputs:
+        previous_version:
+          description: 'Previous Version'
+          required: true
         version:
           description: 'New Version'
           required: true
@@ -19,6 +22,23 @@ jobs:
 
         - name: Checkout repository
           uses: actions/checkout@v4
+
+        - name: Update versions
+          run: |
+            $assemblyInfo = Get-Content Properties/AssemblyInfo.cs
+            $updatedAssemblyInfo = $assemblyInfo -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
+            $updatedAssemblyInfo | Set-Content Properties/AssemblyInfo.cs
+            $program = Get-Content Program.cs
+            $updatedProgram = $program -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
+            $updatedProgram | Set-Content Program.cs
+
+        - name: Commit changes
+          run: |
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git add Properties/AssemblyInfo.cs Program.cs
+            git commit -m "Bump version to ${{ github.event.inputs.version }}"
+            git push
 
         - name: Build library files
           run: MSBuild.exe .\SteamUtility.csproj
