@@ -70,6 +70,7 @@
         <EmbeddedResource Include="IdleWindow.resx">
             <DependentUpon>IdleWindow.cs</DependentUpon>
         </EmbeddedResource>
+        <EmbeddedResource Include="Resources\FallbackImage.jpg" />
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>

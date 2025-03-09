@@ -45,7 +45,7 @@ namespace SteamUtility.Properties
             {
                 if (object.ReferenceEquals(resourceMan, null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Idler.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SteamUtility.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,6 +66,15 @@ namespace SteamUtility.Properties
             set
             {
                 resourceCulture = value;
+            }
+        }
+
+        internal static System.Drawing.Bitmap FallbackImage
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("FallbackImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

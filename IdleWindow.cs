@@ -29,9 +29,16 @@ namespace SteamUtility
                 this.ShowInTaskbar = false;
             }
 
-            appHeader.Load(
-                $"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg"
-            );
+            try
+            {
+                appHeader.Load(
+                    $"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg"
+                );
+            }
+            catch
+            {
+                appHeader.Image = Properties.Resources.FallbackImage;
+            }
 
             startTime = DateTime.Now;
             timer = new Timer();
