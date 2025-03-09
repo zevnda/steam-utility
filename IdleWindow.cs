@@ -35,7 +35,12 @@ namespace SteamUtility
                     $"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg"
                 );
             }
-            catch { }
+            catch
+            {
+                appHeader.Load(
+                    "https://raw.githubusercontent.com/zevnda/steam-game-idler/refs/heads/main/public/fallback.jpg"
+                );
+            }
 
             startTime = DateTime.Now;
             timer = new Timer();
