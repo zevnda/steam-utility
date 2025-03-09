@@ -35,10 +35,7 @@ namespace SteamUtility
                     $"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg"
                 );
             }
-            catch
-            {
-                appHeader.Image = Properties.Resources.FallbackImage;
-            }
+            catch { }
 
             startTime = DateTime.Now;
             timer = new Timer();
