@@ -43,6 +43,7 @@ jobs:
             Compress-Archive -Path "$outputPath\*.exe" -DestinationPath $zipPath
             Compress-Archive -Path ".\icon.ico" -Update $zipPath
             Compress-Archive -Path ".\libs\*" -Update $zipPath
+            Compress-Archive -Path ".\LICENCE" -Update $zipPath
           shell: pwsh
 
         - name: Commit changes
