@@ -33,7 +33,9 @@ namespace SteamUtility.Commands
             // Initialize the Steam API
             if (!SteamAPI.Init())
             {
-                Console.WriteLine("{\"fail\":\"Failed to initialize Steam API\"}");
+                Console.WriteLine(
+                    "{\"fail\":\"Failed to initialize Steam API. The Steam client must be running\"}"
+                );
                 return;
             }
 

@@ -63,6 +63,7 @@
         <Compile Include="Commands\LockAllAchievement.cs" />
         <Compile Include="Commands\UpdateStats.cs" />
         <Compile Include="Commands\ResetAllStats.cs" />
+        <Compile Include="Commands\GetAchievementData.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <!-- Embedded Resources -->

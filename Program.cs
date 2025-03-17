@@ -17,6 +17,7 @@ namespace SteamUtility
             { "lock_all_achievements", new LockAllAchievements() },
             { "update_stats", new UpdateStats() },
             { "reset_all_stats", new ResetAllStats() },
+            { "get_achievement_data", new GetAchievementData() },
         };
 
         static void Main(string[] args)
@@ -48,6 +49,7 @@ namespace SteamUtility
             var commandUsages = new Dictionary<string, string>
             {
                 { "idle <app_id> <no-window:bool>", "Start idling a specific game" },
+                { "get_achievement_data <app_id>", "Get achievement data" },
                 { "unlock_achievement <app_id> <ach_id>", "Unlock a single achievement" },
                 { "lock_achievement <app_id> <ach_id>", "Lock a single achievement" },
                 {
