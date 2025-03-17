@@ -11,6 +11,7 @@ Usage:
 
 Commands:
     idle <app_id> <no-window:bool>                Start idling a specific game
+    get_achievement_data <app_id>                 Get achievement data
     unlock_achievement <app_id> <ach_id>          Unlock a single achievement
     lock_achievement <app_id> <ach_id>            Lock a single achievement
     toggle_achievement <app_id> <ach_id>          Toggle a single achievement's lock state
