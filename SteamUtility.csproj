@@ -54,6 +54,7 @@
             <DependentUpon>IdleWindow.cs</DependentUpon>
         </Compile>
         <Compile Include="Program.cs" />
+        <!-- Command Classes -->
         <Compile Include="Commands\ICommand.cs" />
         <Compile Include="Commands\Idle.cs" />
         <Compile Include="Commands\UnlockAchievement.cs" />
@@ -64,6 +65,15 @@
         <Compile Include="Commands\UpdateStats.cs" />
         <Compile Include="Commands\ResetAllStats.cs" />
         <Compile Include="Commands\GetAchievementData.cs" />
+        <!-- Model Classes -->
+        <Compile Include="Models\AchievementData.cs" />
+        <Compile Include="Models\StatData.cs" />
+        <!-- Utils Classes -->
+        <Compile Include="Utils\KeyValueParser.cs" />
+        <Compile Include="Utils\StatFlagHelper.cs" />
+        <Compile Include="Utils\SteamPathHelper.cs" />
+        <!-- Services Classes -->
+        <Compile Include="Services\StatsSchemaLoader.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <!-- Embedded Resources -->
