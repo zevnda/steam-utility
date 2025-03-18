@@ -24,9 +24,8 @@ namespace SteamUtility.Commands
         {
             if (args.Length < 2)
             {
-                Console.WriteLine(
-                    "Usage: SteamUtility.exe get_permissions <app_id> [achievement_id/stat_id]"
-                );
+                Console.WriteLine("Usage: SteamUtility.exe get_achievement_data <app_id>");
+                Console.WriteLine("Example: SteamUtility.exe get_achievement_data 440");
                 return;
             }
 
