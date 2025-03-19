@@ -16,7 +16,7 @@ namespace SteamUtility.Commands
         private List<AchievementData> _achievementDefinitions = new List<AchievementData>();
         private List<StatData> _statDefinitions = new List<StatData>();
         private static bool statsReceived = false;
-        private static bool globalStatsReceived = false;
+        private static bool globalAchievementPercentagesReceived = false;
         private static Callback<UserStatsReceived_t> statsReceivedCallback;
         private static CallResult<GlobalAchievementPercentagesReady_t> globalStatsCallback;
 
@@ -52,16 +52,9 @@ namespace SteamUtility.Commands
             {
                 // Setup callback and request stats
                 statsReceived = false;
-                globalStatsReceived = false;
+                globalAchievementPercentagesReceived = false;
                 statsReceivedCallback = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
                 CSteamID steamId = SteamUser.GetSteamID();
-
-                // Request global achievement percentages
-                globalStatsCallback = CallResult<GlobalAchievementPercentagesReady_t>.Create(
-                    OnGlobalStatsReceived
-                );
-                SteamAPICall_t hSteamApiCall = SteamUserStats.RequestGlobalAchievementPercentages();
-                globalStatsCallback.Set(hSteamApiCall);
 
                 if (SteamAPICall_t.Invalid == SteamUserStats.RequestUserStats(steamId))
                 {
@@ -71,13 +64,35 @@ namespace SteamUtility.Commands
 
                 // Wait for stats to be received
                 DateTime startTime = DateTime.Now;
-                while (!statsReceived || !globalStatsReceived)
+                while (!statsReceived)
                 {
                     SteamAPI.RunCallbacks();
                     if ((DateTime.Now - startTime).TotalSeconds > 10)
                     {
                         Console.WriteLine("{\"error\":\"Stats callback timed out\"}");
                         return;
+                    }
+                    Thread.Sleep(100);
+                }
+
+                // Request global achievement percentages
+                SteamAPICall_t hSteamApiCall = SteamUserStats.RequestGlobalAchievementPercentages();
+                globalStatsCallback = CallResult<GlobalAchievementPercentagesReady_t>.Create(
+                    OnGlobalAchievementPercentagesReady
+                );
+                globalStatsCallback.Set(hSteamApiCall);
+
+                // Wait for global stats to be received
+                startTime = DateTime.Now;
+                while (!globalAchievementPercentagesReceived)
+                {
+                    SteamAPI.RunCallbacks();
+                    if ((DateTime.Now - startTime).TotalSeconds > 10)
+                    {
+                        Console.WriteLine(
+                            "{\"info\":\"Global achievement percentages timed out, continuing without them\"}"
+                        );
+                        globalAchievementPercentagesReceived = true;
                     }
                     Thread.Sleep(100);
                 }
@@ -93,6 +108,16 @@ namespace SteamUtility.Commands
                 {
                     Console.WriteLine("{\"error\":\"Failed to load schema\"}");
                     return;
+                }
+
+                // Add achievement percentages to achievement data
+                foreach (var achievement in _achievementDefinitions)
+                {
+                    float percent = 0;
+                    if (SteamUserStats.GetAchievementAchievedPercent(achievement.Id, out percent))
+                    {
+                        achievement.Percent = percent;
+                    }
                 }
 
                 if (args.Length >= 3)
@@ -139,22 +164,21 @@ namespace SteamUtility.Commands
             }
         }
 
-        private static void OnGlobalStatsReceived(
+        private static void OnGlobalAchievementPercentagesReady(
             GlobalAchievementPercentagesReady_t pCallback,
             bool bIOFailure
         )
         {
-            if (!bIOFailure && pCallback.m_nGameID == SteamUtils.GetAppID().m_AppId)
+            if (!bIOFailure && pCallback.m_eResult == EResult.k_EResultOK)
             {
-                globalStatsReceived = true;
+                globalAchievementPercentagesReceived = true;
             }
             else
             {
-                // We can continue even if this fails, just won't have percentages
-                globalStatsReceived = true;
                 Console.WriteLine(
-                    "{\"warning\":\"Failed to receive global achievement stats from Steam.\"}"
+                    "{\"info\":\"Failed to get global achievement percentages, continuing without them\"}"
                 );
+                globalAchievementPercentagesReceived = true;
             }
         }
 
