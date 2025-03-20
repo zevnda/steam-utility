@@ -107,7 +107,9 @@ namespace SteamUtility.Commands
                 )
                 {
                     Console.WriteLine("{\"error\":\"Failed to load schema\"}");
-                    return;
+                    // Continue with empty achievement and stat lists instead of returning
+                    _achievementDefinitions = new List<AchievementData>();
+                    _statDefinitions = new List<StatData>();
                 }
 
                 // Add achievement percentages to achievement data
