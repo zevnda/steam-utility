@@ -26,7 +26,9 @@ namespace SteamUtility
             {
                 this.WindowState = FormWindowState.Minimized;
                 this.Opacity = 0;
-                this.ShowInTaskbar = false;
+                this.ShowIcon = false;
+                this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+                this.MinimizeBox = false;
             }
 
             try
