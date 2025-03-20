@@ -10,6 +10,8 @@ on:
           description: 'New Version'
           required: true
 
+run-name: Build release v${{ github.event.inputs.version }}
+
 permissions:
   contents: write
   
