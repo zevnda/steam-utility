@@ -15,9 +15,23 @@ run-name: Build release v${{ github.event.inputs.version }}
 permissions:
   contents: write
   
-jobs:        
+jobs:
+  fetch_previous_version:
+      runs-on: ubuntu-latest
+      outputs:
+        previous_version: ${{ steps.get_version.outputs.previous_version }}
+      steps:
+        - name: Get latest release version
+          id: get_version
+          run: |
+            PREVIOUS_VERSION=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+            echo "Found previous version: $PREVIOUS_VERSION"
+            echo "previous_version=$PREVIOUS_VERSION" >> $GITHUB_OUTPUT
+
   build_release_bundle:
     runs-on: windows-latest
+    needs: fetch_previous_version
+    timeout-minutes: 5
     steps:
         - name: Set up MSBuild
           uses: microsoft/setup-msbuild@v2
@@ -28,10 +42,10 @@ jobs:
         - name: Update versions
           run: |
             $assemblyInfo = Get-Content Properties/AssemblyInfo.cs
-            $updatedAssemblyInfo = $assemblyInfo -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
+            $updatedAssemblyInfo = $assemblyInfo -replace "${{ needs.fetch_previous_version.outputs.previous_version }}", "${{ github.event.inputs.version }}"
             $updatedAssemblyInfo | Set-Content Properties/AssemblyInfo.cs
             $program = Get-Content Program.cs
-            $updatedProgram = $program -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
+            $updatedProgram = $program -replace "${{ needs.fetch_previous_version.outputs.previous_version }}", "${{ github.event.inputs.version }}"
             $updatedProgram | Set-Content Program.cs
 
         - name: Build library files
