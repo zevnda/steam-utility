@@ -3,9 +3,6 @@ name: Build release
 on:
   workflow_dispatch:
     inputs:
-        previous_version:
-          description: 'Previous Version'
-          required: true
         version:
           description: 'New Version'
           required: true
