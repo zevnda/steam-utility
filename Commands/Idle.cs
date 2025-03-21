@@ -1,7 +1,5 @@
 using System;
-using System.Diagnostics;
 using System.Threading;
-using System.Windows.Forms;
 using Steamworks;
 
 namespace SteamUtility.Commands
@@ -10,10 +8,10 @@ namespace SteamUtility.Commands
     {
         public void Execute(string[] args)
         {
-            if (args.Length < 3)
+            if (args.Length < 2)
             {
-                Console.WriteLine("Usage: SteamUtility.exe idle <app_id> <quiet true|false>");
-                Console.WriteLine("Example: SteamUtility.exe idle 440 false");
+                Console.WriteLine("Usage: SteamUtility.exe idle <app_id>");
+                Console.WriteLine("Example: SteamUtility.exe idle 440");
                 return;
             }
 
@@ -22,6 +20,13 @@ namespace SteamUtility.Commands
             {
                 Console.WriteLine("{\"error\":\"Invalid app_id\"}");
                 return;
+            }
+
+            // Get the optional app name if provided
+            string appName = "Idling";
+            if (args.Length >= 3)
+            {
+                appName = args[2];
             }
 
             // Set the SteamAppId environment variable
@@ -40,16 +45,29 @@ namespace SteamUtility.Commands
                 Console.WriteLine("{\"success\":\"Steam API initialized\"}");
             }
 
-            // Determine if quiet mode is enabled
-            bool quietMode = args[2].ToLower() == "true";
+            // Initialize Steam API shutdown when application exits
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => SteamAPI.Shutdown();
 
-            // Run the IdleWindow if not in quiet mode
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new IdleWindow(appId, quietMode));
+            try
+            {
+                // Create the IdleWindow with the app name
+                using (var window = new IdleWindow(appId, appName))
+                {
+                    // Keep the application running
+                    Console.WriteLine("Press Ctrl+C to exit...");
 
-            // Shutdown the Steam API
-            SteamAPI.Shutdown();
+                    // This will keep the application running until it's manually terminated
+                    while (true)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
+            finally
+            {
+                // Make sure to shut down the Steam API in case of exceptions
+                SteamAPI.Shutdown();
+            }
         }
     }
 }

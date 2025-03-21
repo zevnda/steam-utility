@@ -10,7 +10,7 @@ Usage:
     SteamUtility.exe [--help | -h]
 
 Commands:
-    idle <app_id> <no-window:bool>                Start idling a specific game
+    idle <app_id>                                 Start idling a specific game
     get_achievement_data <app_id>                 Get achievement data
     unlock_achievement <app_id> <ach_id>          Unlock a single achievement
     lock_achievement <app_id> <ach_id>            Lock a single achievement
@@ -21,7 +21,7 @@ Commands:
     reset_all_stats <app_id>                      Reset all statistics
 
 Examples:
-    SteamUtility.exe idle 440 false
+    SteamUtility.exe idle 440
     SteamUtility.exe unlock_achievement 440 WIN_100_GAMES
-    SteamUtility.exe update_stats 440 ["{name: 'WINS', value: 100}", "{name: 'MONEY', value: 19.50}"]
+    SteamUtility.exe update_stats 440 ["{name: 'WINS', value: 100}", "{name: 'MONEY', value: 19.50}", ...]
 ```

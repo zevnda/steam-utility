@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using System.Windows.Forms;
 using Steamworks;
 
 namespace SteamUtility.Commands

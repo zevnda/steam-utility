@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using SteamUtility.Commands;
 
 namespace SteamUtility
@@ -48,7 +47,7 @@ namespace SteamUtility
         {
             var commandUsages = new Dictionary<string, string>
             {
-                { "idle <app_id> <no-window:bool>", "Start idling a specific game" },
+                { "idle <app_id>", "Start idling a specific game" },
                 { "get_achievement_data <app_id>", "Get achievement data" },
                 { "unlock_achievement <app_id> <ach_id>", "Unlock a single achievement" },
                 { "lock_achievement <app_id> <ach_id>", "Lock a single achievement" },
@@ -74,7 +73,7 @@ namespace SteamUtility
             }
 
             Console.WriteLine("\nExamples:");
-            Console.WriteLine("    SteamUtility.exe idle 440 false");
+            Console.WriteLine("    SteamUtility.exe idle 440");
             Console.WriteLine("    SteamUtility.exe unlock_achievement 440 WIN_100_GAMES");
             Console.WriteLine(
                 "    SteamUtility.exe update_stats 440 [\"{name: 'WINS', value: 100}\", \"{name: 'MONEY', value: 19.50}\", ...]"

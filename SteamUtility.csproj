@@ -5,13 +5,11 @@
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <!-- Project Properties -->
     <PropertyGroup>
-        <ProjectGuid>{5D53F071-E827-4905-A9D9-E09E59902F32}</ProjectGuid>
         <OutputType>Exe</OutputType>
         <OutputPath>..\src-tauri\libs\</OutputPath>
         <RootNamespace>SteamUtility</RootNamespace>
         <AssemblyName>SteamUtility</AssemblyName>
         <ApplicationIcon>icon.ico</ApplicationIcon>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <PlatformTarget>x86</PlatformTarget>
         <DebugSymbols>false</DebugSymbols>
@@ -34,25 +32,10 @@
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
-        <Reference Include="System.Xml.Linq" />
-        <Reference Include="System.Data.DataSetExtensions" />
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Net.Http" />
-        <Reference Include="System.Net.Http" />
-        <Reference Include="System.Deployment" />
-        <Reference Include="System.Drawing" />
-        <Reference Include="System.Windows.Forms" />
-        <Reference Include="System.Xml" />
     </ItemGroup>
     <!-- Compile Items -->
     <ItemGroup>
-        <Compile Include="IdleWindow.cs">
-            <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="IdleWindow.Designer.cs">
-            <DependentUpon>IdleWindow.cs</DependentUpon>
-        </Compile>
+        <Compile Include="IdleWindow.cs" />
         <Compile Include="Program.cs" />
         <!-- Command Classes -->
         <Compile Include="Commands\ICommand.cs" />
@@ -65,40 +48,17 @@
         <Compile Include="Commands\UpdateStats.cs" />
         <Compile Include="Commands\ResetAllStats.cs" />
         <Compile Include="Commands\GetAchievementData.cs" />
-        <!-- Model Classes -->
+        <!-- Models -->
         <Compile Include="Models\AchievementData.cs" />
         <Compile Include="Models\StatData.cs" />
-        <!-- Utils Classes -->
+        <!-- Utils -->
         <Compile Include="Utils\KeyValueParser.cs" />
         <Compile Include="Utils\StatFlagHelper.cs" />
         <Compile Include="Utils\SteamPathHelper.cs" />
-        <!-- Services Classes -->
+        <!-- Services -->
         <Compile Include="Services\StatsSchemaLoader.cs" />
+        <!-- Properties -->
         <Compile Include="Properties\AssemblyInfo.cs" />
-    </ItemGroup>
-    <!-- Embedded Resources -->
-    <ItemGroup>
-        <EmbeddedResource Include="IdleWindow.resx">
-            <DependentUpon>IdleWindow.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Properties\Resources.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-            <SubType>Designer</SubType>
-        </EmbeddedResource>
-    </ItemGroup>
-    <!-- Designer Files -->
-    <ItemGroup>
-        <Compile Include="Properties\Resources.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Resources.resx</DependentUpon>
-            <DesignTime>True</DesignTime>
-        </Compile>
-        <Compile Include="Properties\Settings.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Settings.settings</DependentUpon>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        </Compile>
     </ItemGroup>
     <!-- Content Files -->
     <ItemGroup>

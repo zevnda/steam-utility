@@ -1,102 +1,94 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace SteamUtility
 {
-    public partial class IdleWindow : Form
+    public class IdleWindow : IDisposable
     {
-        private long appid;
-        private DateTime startTime;
-        private Timer timer;
-        private string appName;
-        private bool quiet;
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr CreateWindowEx(
+            uint dwExStyle,
+            string lpClassName,
+            string lpWindowName,
+            uint dwStyle,
+            int x,
+            int y,
+            int nWidth,
+            int nHeight,
+            IntPtr hWndParent,
+            IntPtr hMenu,
+            IntPtr hInstance,
+            IntPtr lpParam
+        );
 
-        public IdleWindow(long appid, bool quiet)
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool DestroyWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        private const uint WS_POPUP = 0x80000000;
+        private const uint WS_EX_TOOLWINDOW = 0x00000080;
+        private const uint WS_DISABLED = 0x08000000;
+        private const int SW_HIDE = 0;
+
+        private IntPtr _hWnd;
+        private long appid;
+        private string appName;
+        private bool disposed = false;
+
+        public IdleWindow(long appid, string appName = "Idling")
         {
             this.appid = appid;
-            this.quiet = quiet;
-            InitializeComponent();
+            this.appName = appName ?? "Idling";
 
-            if (quiet)
-            {
-                this.WindowState = FormWindowState.Minimized;
-                this.Opacity = 0;
-                this.ShowIcon = false;
-                this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                this.MinimizeBox = false;
-            }
+            string title = $"{this.appName} [{appid}]";
 
-            try
-            {
-                appHeader.Load(
-                    $"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg"
-                );
-            }
-            catch
-            {
-                appHeader.Load(
-                    "https://raw.githubusercontent.com/zevnda/steam-game-idler/refs/heads/main/public/fallback.jpg"
-                );
-            }
+            _hWnd = CreateWindowEx(
+                WS_EX_TOOLWINDOW,
+                "STATIC",
+                title,
+                WS_POPUP | WS_DISABLED,
+                0,
+                0,
+                1,
+                1,
+                IntPtr.Zero,
+                IntPtr.Zero,
+                GetModuleHandle(null),
+                IntPtr.Zero
+            );
 
-            startTime = DateTime.Now;
-            timer = new Timer();
-            timer.Interval = 1000;
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            ShowWindow(_hWnd, SW_HIDE);
         }
 
-        private async void IdleWindow_Load(object sender, EventArgs e)
+        public void Dispose()
         {
-            await GetAppName(appid);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        protected virtual void Dispose(bool disposing)
         {
-            TimeSpan elapsed = DateTime.Now - startTime;
-            string timeString = elapsed.ToString(@"hh\:mm\:ss");
-            this.Text = $"{appName} [{appid}] - {timeString}";
-        }
-
-        private async Task GetAppName(long appid)
-        {
-            try
+            if (!disposed)
             {
-                using (var client = new HttpClient())
+                if (_hWnd != IntPtr.Zero)
                 {
-                    var response = await client.GetAsync(
-                        $"https://store.steampowered.com/api/appdetails?l=english&appids={appid}"
-                    );
-                    response.EnsureSuccessStatusCode();
-                    var responseBody = await response.Content.ReadAsStringAsync();
-
-                    var jsonData = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(
-                        responseBody
-                    );
-                    var data = (JObject)jsonData[appid.ToString()];
-                    appName = (string)data["data"]["name"];
-                    if (string.IsNullOrWhiteSpace(appName))
-                    {
-                        appName = "Unknown Game";
-                    }
+                    DestroyWindow(_hWnd);
+                    _hWnd = IntPtr.Zero;
                 }
-            }
-            catch (Exception)
-            {
-                appName = "Idling";
+
+                disposed = true;
             }
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        ~IdleWindow()
         {
-            base.OnFormClosing(e);
-            timer.Stop();
-            timer.Dispose();
+            Dispose(false);
         }
     }
 }
