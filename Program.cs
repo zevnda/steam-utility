@@ -61,7 +61,9 @@ namespace SteamUtility
                 { "reset_all_stats <app_id>", "Reset all statistics" },
             };
 
-            Console.WriteLine("SteamUtility 1.3.0 by zevnda");
+            Console.WriteLine(
+                "SteamUtility 1.3.0 by zevnda - https://github.com/zevnda/steam-utility"
+            );
             Console.WriteLine("\nUsage:");
             Console.WriteLine("    SteamUtility.exe <command> [args...]");
             Console.WriteLine("    SteamUtility.exe [--help | -h]");
