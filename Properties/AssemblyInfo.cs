@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SteamUtility")]
-[assembly: AssemblyCopyright("Copyright © 2025 zevnda")]
+[assembly: AssemblyCopyright("Copyright © 2024-2025 zevnda")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
