@@ -1,76 +1,63 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build"
-    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Import Microsoft.Common.props -->
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <!-- Project Properties -->
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <OutputPath>..\src-tauri\libs\</OutputPath>
-        <RootNamespace>SteamUtility</RootNamespace>
-        <AssemblyName>SteamUtility</AssemblyName>
-        <ApplicationIcon>icon.ico</ApplicationIcon>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <PlatformTarget>x86</PlatformTarget>
-        <DebugSymbols>false</DebugSymbols>
-        <IntermediateOutputPath>..\libs\temp\</IntermediateOutputPath>
-    </PropertyGroup>
-    <!-- Post Build (dev) -->
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).exe" DestinationFolder="..\src-tauri\target\debug\libs\" />
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).exe" DestinationFolder="..\src-tauri\target\release\libs\" />
-        <Copy SourceFiles="$(OutputPath)icon.ico" DestinationFolder="..\src-tauri\target\debug\libs\" />
-        <Copy SourceFiles="$(OutputPath)icon.ico" DestinationFolder="..\src-tauri\target\release\libs\" />
-    </Target>
-    <!-- References -->
-    <ItemGroup>
-        <Reference Include="Newtonsoft.Json">
-            <HintPath>.\libs\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="Steamworks.NET">
-            <HintPath>.\libs\Steamworks.NET.dll</HintPath>
-        </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-    </ItemGroup>
-    <!-- Compile Items -->
-    <ItemGroup>
-        <Compile Include="IdleWindow.cs" />
-        <Compile Include="Program.cs" />
-        <!-- Command Classes -->
-        <Compile Include="Commands\ICommand.cs" />
-        <Compile Include="Commands\Idle.cs" />
-        <Compile Include="Commands\UnlockAchievement.cs" />
-        <Compile Include="Commands\LockAchievement.cs" />
-        <Compile Include="Commands\ToggleAchievement.cs" />
-        <Compile Include="Commands\UnlockAllAchievements.cs" />
-        <Compile Include="Commands\LockAllAchievement.cs" />
-        <Compile Include="Commands\UpdateStats.cs" />
-        <Compile Include="Commands\ResetAllStats.cs" />
-        <Compile Include="Commands\GetAchievementData.cs" />
-        <!-- Models -->
-        <Compile Include="Models\AchievementData.cs" />
-        <Compile Include="Models\StatData.cs" />
-        <!-- Utils -->
-        <Compile Include="Utils\KeyValueParser.cs" />
-        <Compile Include="Utils\StatFlagHelper.cs" />
-        <Compile Include="Utils\SteamPathHelper.cs" />
-        <!-- Services -->
-        <Compile Include="Services\StatsSchemaLoader.cs" />
-        <!-- Properties -->
-        <Compile Include="Properties\AssemblyInfo.cs" />
-    </ItemGroup>
-    <!-- Content Files -->
-    <ItemGroup>
-        <Content Include=".\libs\steam_api.dll">
-            <Link>steam_api.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="icon.ico">
-            <Link>icon.ico</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-    <!-- Import Microsoft.CSharp.targets -->
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputPath>..\src-tauri\libs\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <RootNamespace>SteamUtility</RootNamespace>
+    <AssemblyName>SteamUtility</AssemblyName>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <PlatformTarget>x86</PlatformTarget>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>link</TrimMode>
+    <DebugSymbols>false</DebugSymbols>
+    <!-- Fix the intermediate path to avoid conflicts -->
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)\</IntermediateOutputPath>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyTitle>SteamUtility</AssemblyTitle>
+    <AssemblyDescription></AssemblyDescription>
+    <AssemblyConfiguration></AssemblyConfiguration>
+    <AssemblyCompany></AssemblyCompany>
+    <AssemblyProduct>SteamUtility</AssemblyProduct>
+    <AssemblyCopyright>Copyright © 2024-2025 zevnda</AssemblyCopyright>
+    <AssemblyTrademark></AssemblyTrademark>
+    <AssemblyVersion>1.3.0</AssemblyVersion>
+    <FileVersion>1.3.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Steamworks.NET" Version="2024.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".\libs\steam_api.dll">
+      <Link>steam_api.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icon.ico">
+      <Link>icon.ico</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).exe" DestinationFolder="..\src-tauri\target\debug\libs\" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).exe" DestinationFolder="..\src-tauri\target\release\libs\" />
+    <Copy SourceFiles="$(OutputPath)steam_api.dll" DestinationFolder="..\src-tauri\target\debug\libs\" />
+    <Copy SourceFiles="$(OutputPath)steam_api.dll" DestinationFolder="..\src-tauri\target\release\libs\" />
+    <Copy SourceFiles="$(OutputPath)icon.ico" DestinationFolder="..\src-tauri\target\debug\libs\" />
+    <Copy SourceFiles="$(OutputPath)icon.ico" DestinationFolder="..\src-tauri\target\release\libs\" />
+  </Target>
 </Project>
