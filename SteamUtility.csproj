@@ -54,10 +54,11 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).exe" DestinationFolder="..\src-tauri\target\debug\libs\" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).exe" DestinationFolder="..\src-tauri\target\release\libs\" />
     <Copy SourceFiles="$(OutputPath)steam_api.dll" DestinationFolder="..\src-tauri\target\debug\libs\" />
-    <Copy SourceFiles="$(OutputPath)steam_api.dll" DestinationFolder="..\src-tauri\target\release\libs\" />
     <Copy SourceFiles="$(OutputPath)icon.ico" DestinationFolder="..\src-tauri\target\debug\libs\" />
+
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).exe" DestinationFolder="..\src-tauri\target\release\libs\" />
+    <Copy SourceFiles="$(OutputPath)steam_api.dll" DestinationFolder="..\src-tauri\target\release\libs\" />
     <Copy SourceFiles="$(OutputPath)icon.ico" DestinationFolder="..\src-tauri\target\release\libs\" />
   </Target>
 </Project>
