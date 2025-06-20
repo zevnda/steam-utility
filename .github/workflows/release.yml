@@ -54,12 +54,9 @@ jobs:
 
         - name: Create zip file
           run: |
-            $outputPath = "..\src-tauri\libs\"
+            $outputPath = "..\src-tauri\libs\*"
             $zipPath = "SteamUtility_${{ github.event.inputs.version }}.zip"
-            Compress-Archive -Path "$outputPath\*.exe" -DestinationPath $zipPath
-            Compress-Archive -Path ".\icon.ico" -Update $zipPath
-            Compress-Archive -Path ".\libs\*" -Update $zipPath
-            Compress-Archive -Path ".\LICENSE" -Update $zipPath
+            Compress-Archive -Path $outputPath -DestinationPath $zipPath
           shell: pwsh
 
         - name: Commit changes
