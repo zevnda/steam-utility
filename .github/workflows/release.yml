@@ -30,23 +30,26 @@ jobs:
     needs: fetch_previous_version
     timeout-minutes: 5
     steps:
-        - name: Set up MSBuild
-          uses: microsoft/setup-msbuild@v2
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '8.0.x'
 
         - name: Checkout repository
           uses: actions/checkout@v4
 
         - name: Update versions
           run: |
-            $assemblyInfo = Get-Content Properties/AssemblyInfo.cs
-            $updatedAssemblyInfo = $assemblyInfo -replace "${{ needs.fetch_previous_version.outputs.previous_version }}", "${{ github.event.inputs.version }}"
-            $updatedAssemblyInfo | Set-Content Properties/AssemblyInfo.cs
+            $csproj = Get-Content SteamUtility.csproj
+            $updatedCsproj = $csproj -replace "<AssemblyVersion>${{ needs.fetch_previous_version.outputs.previous_version }}</AssemblyVersion>", "<AssemblyVersion>${{ github.event.inputs.version }}</AssemblyVersion>"
+            $updatedCsproj = $updatedCsproj -replace "<FileVersion>${{ needs.fetch_previous_version.outputs.previous_version }}</FileVersion>", "<FileVersion>${{ github.event.inputs.version }}</FileVersion>"
+            $updatedCsproj | Set-Content SteamUtility.csproj
             $program = Get-Content Program.cs
             $updatedProgram = $program -replace "${{ needs.fetch_previous_version.outputs.previous_version }}", "${{ github.event.inputs.version }}"
             $updatedProgram | Set-Content Program.cs
 
-        - name: Build library files
-          run: MSBuild.exe .\SteamUtility.csproj
+        - name: Build .NET libraries
+          run: dotnet build .\libs\SteamUtility.csproj
           shell: pwsh
 
         - name: Create zip file
@@ -63,7 +66,7 @@ jobs:
           run: |
             git config --local user.name "github-actions[bot]"
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git add Properties/AssemblyInfo.cs Program.cs
+            git add SteamUtility.csproj Program.cs
             git commit -m "Bump version to ${{ github.event.inputs.version }}"
             git push
 
