@@ -49,7 +49,7 @@ jobs:
             $updatedProgram | Set-Content Program.cs
 
         - name: Build .NET libraries
-          run: dotnet build .\libs\SteamUtility.csproj
+          run: dotnet build .\SteamUtility.csproj
           shell: pwsh
 
         - name: Create zip file
