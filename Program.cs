@@ -17,6 +17,7 @@ namespace SteamUtility
             { "update_stats", new UpdateStats() },
             { "reset_all_stats", new ResetAllStats() },
             { "get_achievement_data", new GetAchievementData() },
+            { "get_user_summary", new GetUserSummary() },
         };
 
         static void Main(string[] args)
@@ -59,6 +60,7 @@ namespace SteamUtility
                 { "lock_all_achievements <app_id>", "Lock all achievements" },
                 { "update_stats <app_id> <[stat_objects...]>", "Update achievement statistics" },
                 { "reset_all_stats <app_id>", "Reset all statistics" },
+                { "get_user_summary [steamid64]", "Get a user's Steam summary (defaults to self if omitted)" },
             };
 
             Console.WriteLine(
