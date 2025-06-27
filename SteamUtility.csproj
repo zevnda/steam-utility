@@ -32,6 +32,7 @@
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
+        <Reference Include="System.Drawing" />
     </ItemGroup>
     <!-- Compile Items -->
     <ItemGroup>
@@ -48,6 +49,7 @@
         <Compile Include="Commands\UpdateStats.cs" />
         <Compile Include="Commands\ResetAllStats.cs" />
         <Compile Include="Commands\GetAchievementData.cs" />
+        <Compile Include="Commands\GetUserSummary.cs" />
         <!-- Models -->
         <Compile Include="Models\AchievementData.cs" />
         <Compile Include="Models\StatData.cs" />
