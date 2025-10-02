@@ -24,8 +24,8 @@ namespace SteamUtility.Commands
         {
             if (args.Length < 2)
             {
-                Console.WriteLine("Usage: SteamUtility.exe get_achievement_data <app_id>");
-                Console.WriteLine("Example: SteamUtility.exe get_achievement_data 440");
+                Console.WriteLine("Usage: SteamUtility.exe get_achievement_data <app_id> [storage_dir]");
+                Console.WriteLine("Example: SteamUtility.exe get_achievement_data 440 \"C:\\path\\to\\storage\"");
                 return;
             }
 
@@ -35,6 +35,9 @@ namespace SteamUtility.Commands
                 Console.WriteLine("{\"error\":\"Invalid app_id\"}");
                 return;
             }
+
+            // Get cache directory path from args if provided
+            string cacheDir = args.Length >= 3 ? args[2] : null;
 
             // Set the Steam App ID environment variable
             Environment.SetEnvironmentVariable("SteamAppId", appId.ToString());
@@ -122,13 +125,13 @@ namespace SteamUtility.Commands
                     }
                 }
 
-                if (args.Length >= 3)
+                if (args.Length >= 4)
                 {
-                    OutputSpecificItem(args[2]);
+                    OutputSpecificItem(args[3]);
                 }
                 else
                 {
-                    OutputAllItems(appId);
+                    OutputAllItems(appId, cacheDir);
                 }
             }
             catch (Exception ex)
@@ -235,7 +238,7 @@ namespace SteamUtility.Commands
             }
         }
 
-        private void OutputAllItems(uint appId)
+        private void OutputAllItems(uint appId, string cacheDir = null)
         {
             var result = new Dictionary<string, object>
             {
@@ -282,7 +285,7 @@ namespace SteamUtility.Commands
 
             // Save to file
             string jsonContent = JsonConvert.SerializeObject(result, Formatting.Indented);
-            string filePath = SteamPathHelper.GetAchievementDataPath(appId);
+            string filePath = SteamPathHelper.GetAchievementDataPath(appId, cacheDir);
             File.WriteAllText(filePath, jsonContent);
             Console.WriteLine($"{{\"success\":\"{filePath}\"}}");
         }

@@ -48,7 +48,7 @@ namespace SteamUtility
             var commandUsages = new Dictionary<string, string>
             {
                 { "idle <app_id>", "Start idling a specific game" },
-                { "get_achievement_data <app_id>", "Get achievement data" },
+                { "get_achievement_data <app_id> [storage_dir]", "Get achievement data" },
                 { "unlock_achievement <app_id> <ach_id>", "Unlock a single achievement" },
                 { "lock_achievement <app_id> <ach_id>", "Lock a single achievement" },
                 {
@@ -71,7 +71,7 @@ namespace SteamUtility
 
             foreach (var cmd in commandUsages)
             {
-                Console.WriteLine($"    {cmd.Key, -45} {cmd.Value}");
+                Console.WriteLine($"    {cmd.Key, -50} {cmd.Value}");
             }
 
             Console.WriteLine("\nExamples:");
