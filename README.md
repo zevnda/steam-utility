@@ -10,15 +10,15 @@ Usage:
     SteamUtility.exe [--help | -h]
 
 Commands:
-    idle <app_id>                                 Start idling a specific game
-    get_achievement_data <app_id>                 Get achievement data
-    unlock_achievement <app_id> <ach_id>          Unlock a single achievement
-    lock_achievement <app_id> <ach_id>            Lock a single achievement
-    toggle_achievement <app_id> <ach_id>          Toggle a single achievement's lock state
-    unlock_all_achievements <app_id>              Unlock all achievements
-    lock_all_achievements <app_id>                Lock all achievements
-    update_stats <app_id> <[stat_objects...]>     Update achievement statistics
-    reset_all_stats <app_id>                      Reset all statistics
+    idle <app_id>                                     Start idling a specific game
+    get_achievement_data <app_id> [storage_dir]       Get achievement data
+    unlock_achievement <app_id> <ach_id>              Unlock a single achievement
+    lock_achievement <app_id> <ach_id>                Lock a single achievement
+    toggle_achievement <app_id> <ach_id>              Toggle a single achievement's lock state
+    unlock_all_achievements <app_id>                  Unlock all achievements
+    lock_all_achievements <app_id>                    Lock all achievements
+    update_stats <app_id> <[stat_objects...]>         Update achievement statistics
+    reset_all_stats <app_id>                          Reset all statistics
 
 Examples:
     SteamUtility.exe idle 440
