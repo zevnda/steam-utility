@@ -13,12 +13,25 @@ namespace SteamUtility.Utils
 
     public static class StatFlagHelper
     {
-        public static StatFlags GetFlags(int permission, bool isIncrementOnly)
+        public static StatFlags GetFlags(
+            int permission,
+            bool incrementOnly,
+            bool isAchievement = false
+        )
         {
-            var flags = StatFlags.None;
-            flags |= !isIncrementOnly ? 0 : StatFlags.IncrementOnly;
-            flags |= (permission & 2) != 0 ? StatFlags.Protected : 0;
-            flags |= (permission & ~2) != 0 ? StatFlags.UnknownPermission : 0;
+            StatFlags flags = StatFlags.None;
+            // Only set IncrementOnly for stats, never for achievements
+            if (!isAchievement && incrementOnly)
+                flags |= StatFlags.IncrementOnly;
+            // PROTECTED: Achievements: (permission & 3) != 0, Stats: (permission & 2) != 0
+            if (
+                (isAchievement && (permission & 3) != 0)
+                || (!isAchievement && (permission & 2) != 0)
+            )
+                flags |= StatFlags.Protected;
+            // Optionally set UnknownPermission if high bits are set
+            if ((permission & ~(isAchievement ? 3 : 2)) != 0)
+                flags |= StatFlags.UnknownPermission;
             return flags;
         }
     }

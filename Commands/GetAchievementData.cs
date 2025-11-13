@@ -24,8 +24,12 @@ namespace SteamUtility.Commands
         {
             if (args.Length < 2)
             {
-                Console.WriteLine("Usage: SteamUtility.exe get_achievement_data <app_id> [storage_dir]");
-                Console.WriteLine("Example: SteamUtility.exe get_achievement_data 440 \"C:\\path\\to\\storage\"");
+                Console.WriteLine(
+                    "Usage: SteamUtility.exe get_achievement_data <app_id> [storage_dir]"
+                );
+                Console.WriteLine(
+                    "Example: SteamUtility.exe get_achievement_data 440 \"C:\\path\\to\\storage\""
+                );
                 return;
             }
 
@@ -194,7 +198,7 @@ namespace SteamUtility.Commands
 
             if (achievement != null)
             {
-                var flags = StatFlagHelper.GetFlags(achievement.Permission, false);
+                var flags = StatFlagHelper.GetFlags(achievement.Permission, false, true);
                 var result = new Dictionary<string, object>
                 {
                     { "type", "achievement" },
@@ -246,7 +250,7 @@ namespace SteamUtility.Commands
                     "achievements",
                     _achievementDefinitions.Select(a =>
                     {
-                        var flags = StatFlagHelper.GetFlags(a.Permission, false);
+                        var flags = StatFlagHelper.GetFlags(a.Permission, false, true);
                         return new
                         {
                             id = a.Id,
