@@ -12,32 +12,29 @@
   <!-- Project Properties -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <OutputPath>..\..\src-tauri\libs\</OutputPath>
+    <OutputPath>..\src-tauri\libs\</OutputPath>
     <RootNamespace>SteamUtility</RootNamespace>
     <AssemblyName>SteamUtility</AssemblyName>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>false</DebugSymbols>
-    <IntermediateOutputPath>temp</IntermediateOutputPath>
+    <IntermediateOutputPath>..\libs\temp\</IntermediateOutputPath>
   </PropertyGroup>
   <!-- Post Build (dev) -->
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy
       SourceFiles="$(OutputPath)$(AssemblyName).exe"
-      DestinationFolder="..\..\src-tauri\target\debug\libs\"
+      DestinationFolder="..\src-tauri\target\debug\libs\"
     />
     <Copy
       SourceFiles="$(OutputPath)$(AssemblyName).exe"
-      DestinationFolder="..\..\src-tauri\target\release\libs\"
+      DestinationFolder="..\src-tauri\target\release\libs\"
     />
+    <Copy SourceFiles="$(OutputPath)icon.ico" DestinationFolder="..\src-tauri\target\debug\libs\" />
     <Copy
       SourceFiles="$(OutputPath)icon.ico"
-      DestinationFolder="..\..\src-tauri\target\debug\libs\"
-    />
-    <Copy
-      SourceFiles="$(OutputPath)icon.ico"
-      DestinationFolder="..\..\src-tauri\target\release\libs\"
+      DestinationFolder="..\src-tauri\target\release\libs\"
     />
   </Target>
   <!-- References -->
