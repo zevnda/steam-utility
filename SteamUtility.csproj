@@ -20,6 +20,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>false</DebugSymbols>
     <IntermediateOutputPath>..\libs\temp\</IntermediateOutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <!-- Post Build (dev) -->
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -59,10 +61,28 @@
     <Compile Include="Commands\LockAchievement.cs" />
     <Compile Include="Commands\ToggleAchievement.cs" />
     <Compile Include="Commands\UnlockAllAchievements.cs" />
-    <Compile Include="Commands\LockAllAchievement.cs" />
+    <Compile Include="Commands\LockAllAchievements.cs" />
     <Compile Include="Commands\UpdateStats.cs" />
     <Compile Include="Commands\ResetAllStats.cs" />
     <Compile Include="Commands\GetAchievementData.cs" />
+    <Compile Include="Commands\CheckOwnership.cs" />
+    <!-- API -->
+    <Compile Include="Interop\Client.cs" />
+    <Compile Include="Interop\ClientInitializeException.cs" />
+    <Compile Include="Interop\ClientInitializeFailure.cs" />
+    <Compile Include="Interop\INativeWrapper.cs" />
+    <Compile Include="Interop\NativeClass.cs" />
+    <Compile Include="Interop\NativeStrings.cs" />
+    <Compile Include="Interop\NativeWrapper.cs" />
+    <Compile Include="Interop\Steam.cs" />
+    <Compile Include="Interop\Interfaces\ISteamApps001.cs" />
+    <Compile Include="Interop\Interfaces\ISteamApps008.cs" />
+    <Compile Include="Interop\Interfaces\ISteamClient018.cs" />
+    <Compile Include="Interop\Interfaces\ISteamUtils005.cs" />
+    <Compile Include="Interop\Wrappers\SteamApps001.cs" />
+    <Compile Include="Interop\Wrappers\SteamApps008.cs" />
+    <Compile Include="Interop\Wrappers\SteamClient018.cs" />
+    <Compile Include="Interop\Wrappers\SteamUtils005.cs" />
     <!-- Models -->
     <Compile Include="Models\AchievementData.cs" />
     <Compile Include="Models\StatData.cs" />

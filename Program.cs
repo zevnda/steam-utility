@@ -17,6 +17,7 @@ namespace SteamUtility
             { "update_stats", new UpdateStats() },
             { "reset_all_stats", new ResetAllStats() },
             { "get_achievement_data", new GetAchievementData() },
+            { "check_ownership", new CheckOwnership() },
         };
 
         static void Main(string[] args)
@@ -47,8 +48,12 @@ namespace SteamUtility
         {
             var commandUsages = new Dictionary<string, string>
             {
+                {
+                    "check_ownership <output_path> [app_ids]",
+                    "Check if the user owns a specific game"
+                },
                 { "idle <app_id>", "Start idling a specific game" },
-                { "get_achievement_data <app_id> [storage_dir]", "Get achievement data" },
+                { "get_achievement_data <app_id> [output_dir]", "Get achievement data" },
                 { "unlock_achievement <app_id> <ach_id>", "Unlock a single achievement" },
                 { "lock_achievement <app_id> <ach_id>", "Lock a single achievement" },
                 {
@@ -79,6 +84,9 @@ namespace SteamUtility
             Console.WriteLine("    SteamUtility.exe unlock_achievement 440 WIN_100_GAMES");
             Console.WriteLine(
                 "    SteamUtility.exe update_stats 440 [\"{name: 'WINS', value: 100}\", \"{name: 'MONEY', value: 19.50}\", ...]"
+            );
+            Console.WriteLine(
+                "    SteamUtility.exe check_ownership \"C:\\output\\games.json\" \"[730,570,440]\""
             );
         }
     }

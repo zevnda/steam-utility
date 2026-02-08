@@ -10,18 +10,20 @@ Usage:
     SteamUtility.exe [--help | -h]
 
 Commands:
-    idle <app_id>                                     Start idling a specific game
-    get_achievement_data <app_id> [storage_dir]       Get achievement data
-    unlock_achievement <app_id> <ach_id>              Unlock a single achievement
-    lock_achievement <app_id> <ach_id>                Lock a single achievement
-    toggle_achievement <app_id> <ach_id>              Toggle a single achievement's lock state
-    unlock_all_achievements <app_id>                  Unlock all achievements
-    lock_all_achievements <app_id>                    Lock all achievements
-    update_stats <app_id> <[stat_objects...]>         Update achievement statistics
-    reset_all_stats <app_id>                          Reset all statistics
+    check_ownership <output_path> [app_ids]            Check if the user owns a specific game
+    idle <app_id>                                      Start idling a specific game
+    get_achievement_data <app_id> [output_dir]         Get achievement data
+    unlock_achievement <app_id> <ach_id>               Unlock a single achievement
+    lock_achievement <app_id> <ach_id>                 Lock a single achievement
+    toggle_achievement <app_id> <ach_id>               Toggle a single achievement's lock state
+    unlock_all_achievements <app_id>                   Unlock all achievements
+    lock_all_achievements <app_id>                     Lock all achievements
+    update_stats <app_id> <[stat_objects...]>          Update achievement statistics
+    reset_all_stats <app_id>                           Reset all statistics
 
 Examples:
     SteamUtility.exe idle 440
     SteamUtility.exe unlock_achievement 440 WIN_100_GAMES
     SteamUtility.exe update_stats 440 ["{name: 'WINS', value: 100}", "{name: 'MONEY', value: 19.50}", ...]
+    SteamUtility.exe check_ownership "C:\output\games.json" "[730,570,440]"
 ```
