@@ -67,7 +67,7 @@ namespace SteamUtility
             };
 
             Console.WriteLine(
-                "SteamUtility 1.5.0 by zevnda - https://github.com/zevnda/steam-utility"
+                "SteamUtility 1.5.1 by zevnda - https://github.com/zevnda/steam-utility"
             );
             Console.WriteLine("\nUsage:");
             Console.WriteLine("    SteamUtility.exe <command> [args...]");
