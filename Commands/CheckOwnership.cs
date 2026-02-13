@@ -112,7 +112,6 @@ namespace SteamUtility.Commands
                     client.Initialize(0);
 
                     var ownedGames = new List<object>();
-                    var notOwnedGames = new List<uint>();
 
                     foreach (uint appId in appIds)
                     {
@@ -137,10 +136,6 @@ namespace SteamUtility.Commands
                                 ownedGames.Add(
                                     new { appid = appId, name = appName ?? $"App {appId}" }
                                 );
-                            }
-                            else
-                            {
-                                notOwnedGames.Add(appId);
                             }
                         }
                         catch (Exception)
@@ -168,7 +163,6 @@ namespace SteamUtility.Commands
                         success = true,
                         totalChecked = appIds.Count,
                         ownedCount = ownedGames.Count,
-                        notOwnedCount = notOwnedGames.Count,
                     };
 
                     string jsonOutput = JsonConvert.SerializeObject(result, Formatting.None);
