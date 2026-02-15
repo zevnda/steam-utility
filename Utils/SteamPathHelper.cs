@@ -16,16 +16,12 @@ namespace SteamUtility.Utils
         public static string GetAchievementDataPath(uint appId, string cacheDir = null)
         {
             string targetDir;
-            
+
             if (!string.IsNullOrEmpty(cacheDir))
             {
                 // Use provided cache directory
                 CSteamID steamId = SteamUser.GetSteamID();
-                targetDir = Path.Combine(
-                    cacheDir,
-                    steamId.ToString(),
-                    "achievement_data"
-                );
+                targetDir = Path.Combine(cacheDir, steamId.ToString(), "achievement_data");
             }
             else
             {

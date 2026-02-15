@@ -47,9 +47,87 @@ namespace SteamUtility.Services
                 if (!stat.Valid)
                     continue;
 
-                var rawType = stat["type_int"].Valid
-                    ? stat["type_int"].AsInteger(0)
-                    : stat["type"].AsInteger(0);
+                // Steam changed format - type_int field no longer exists in new schema files
+                // Determine type by structure:
+                // - Has "bits" child = Achievement (type 4) or GroupAchievement (type 5)
+                // - Has "type" or "type_int" field = use that value
+                // - Else determine by value type or default to Integer stat (type 1)
+
+                int rawType = 0;
+
+                // First try the old format fields
+                if (stat["type_int"].Valid)
+                {
+                    rawType = stat["type_int"].AsInteger(0);
+                }
+                else if (stat["type"].Valid)
+                {
+                    // Check if tpye is a string (new format) or integer (old format)
+                    if (stat["type"].Type == KeyValueType.String)
+                    {
+                        string typeStr = stat["type"].AsString("");
+
+                        if (typeStr.Equals("INT", StringComparison.OrdinalIgnoreCase))
+                            rawType = 1;
+                        else if (typeStr.Equals("FLOAT", StringComparison.OrdinalIgnoreCase))
+                            rawType = 2;
+                        else if (typeStr.Equals("AVGRATE", StringComparison.OrdinalIgnoreCase))
+                            rawType = 3;
+                        else if (
+                            typeStr.Equals("ACHIEVEMENT", StringComparison.OrdinalIgnoreCase)
+                            || typeStr.Equals("ACHIEVEMENTS", StringComparison.OrdinalIgnoreCase)
+                        )
+                            rawType = 4;
+                    }
+                    else
+                    {
+                        // Old format with integer type
+                        rawType = stat["type"].AsInteger(0);
+                    }
+                }
+                // New format, detect by structure
+                else
+                {
+                    // Check if this is an achievement by looking for "bits" child
+                    bool hasBits =
+                        stat.Children != null
+                        && stat.Children.Any(c =>
+                            string.Compare(
+                                c.Name,
+                                "bits",
+                                StringComparison.InvariantCultureIgnoreCase
+                            ) == 0
+                        );
+
+                    if (hasBits)
+                    {
+                        // Is an achievement
+                        rawType = 4;
+                    }
+                    else
+                    {
+                        // It's a stat, determine type by checking for min/max/default values
+                        // If any are floats, it's a float stat (type 2) otherwise integer (type 1)
+                        bool hasFloatValue = false;
+
+                        if (stat["min"].Valid && stat["min"].Type == KeyValueType.Float32)
+                            hasFloatValue = true;
+                        if (stat["max"].Valid && stat["max"].Type == KeyValueType.Float32)
+                            hasFloatValue = true;
+                        if (stat["default"].Valid && stat["default"].Type == KeyValueType.Float32)
+                            hasFloatValue = true;
+
+                        // Check for window field which indicates avgrate (type 3)
+                        bool hasWindow = stat["window"].Valid;
+
+                        if (hasWindow)
+                            rawType = 3; // AverageRate
+                        else if (hasFloatValue)
+                            rawType = 2; // Float
+                        else
+                            rawType = 1; // Integer (default)
+                    }
+                }
 
                 switch (rawType)
                 {
